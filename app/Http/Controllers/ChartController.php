@@ -17,9 +17,9 @@ class ChartController extends Controller
      */
     public function index(Request $request)
     {
-        $type = $request->input('type') ?? 'expense';
-        $year = (int) $request->input('year') ?? now()->year;
-        $month = (int) $request->input('month') ?? now()->month;
+        $type = $request->input('type', 'expense');
+        $year = (int) $request->input('year', now()->year);
+        $month = (int) $request->input('month', now()->month);
 
         $records = Category::join('records', 'records.category_id', '=', 'categories.id')
             ->whereNotNull('categories.group')
@@ -115,9 +115,11 @@ class ChartController extends Controller
     public function displayRecordsInCategory(Request $request)
     {
         $categoryId = $request->route('id');
-        $month = (int) $request->input('month') ?? now()->month;
-        $year = (int) $request->input('year') ?? now()->year;
-        $url = $request->input('url');
+        $month = (int) $request->input('month', now()->month);
+        $year = (int) $request->input('year', now()->year);
+        $url = $request->input(
+            'url',
+        );
 
         $category = Category::select('id', 'name', 'icon', 'color')->findOrFail($categoryId);
 
